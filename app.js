@@ -14,7 +14,7 @@ if (agreeChk && agreeBtn) {
   agreeBtn.addEventListener("click", () => {
     // хадгалах
     localStorage.setItem(
-      "SafetyFoodBio-Lab_consent",
+      "SafetyFoodBioChem-Lab_consent",
       JSON.stringify({ agreed: true, time: new Date().toISOString() })
     );
 
