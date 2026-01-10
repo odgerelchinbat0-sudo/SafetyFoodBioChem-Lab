@@ -144,7 +144,101 @@ document.getElementById("btnCalcMoist")?.addEventListener("click", () => {
   moistNote.textContent = isConst
     ? `m_dry = m₃ ашиглав (тогтмол жин). Нойтон дээж = ${wetSample.toFixed(3)} g`
     : `⚠️ Тогтмол жин батлагдаагүй тул m_dry = m₂ түр ашиглав. Дахин хатааж шалгаарай.`;
+// ===== Visual mini-sim for Lab 01 (Wet -> Oven -> Dry) =====
+const btnWet = document.getElementById("btnWet");
+const btnOven = document.getElementById("btnOven");
+const btnDry = document.getElementById("btnDry");
 
+const meatVisual = document.getElementById("meatVisual");
+const meatLabel = document.getElementById("meatLabel");
+const meatDesc = document.getElementById("meatDesc");
+
+const ovenDoor = document.getElementById("ovenDoor");
+const ovenTimer = document.getElementById("ovenTimer");
+const ovenStatus = document.getElementById("ovenStatus");
+
+let ovenInterval = null;
+
+function setWetView() {
+  if (meatVisual) meatVisual.textContent = "🥩💧";
+  if (meatLabel) meatLabel.textContent = "Нойтон дээж";
+  if (meatDesc) meatDesc.textContent = "Чийг ихтэй, өнгө “шинэ” харагдана.";
+  if (btnDry) { btnDry.disabled = true; btnDry.style.opacity = 0.6; }
+  if (ovenTimer) ovenTimer.textContent = "00:00";
+  if (ovenStatus) ovenStatus.textContent = "Дараах товчийг дарж хатаалтыг эхлүүлнэ.";
+  if (ovenDoor) ovenDoor.textContent = "🚪";
+}
+
+function setDryView() {
+  if (meatVisual) meatVisual.textContent = "🥩✨";
+  if (meatLabel) meatLabel.textContent = "Хатаасан дээж";
+  if (meatDesc) meatDesc.textContent = "Чийг багассан, өнгө арай бараан/хуурай харагдана.";
+  if (ovenDoor) ovenDoor.textContent = "✅";
+}
+
+btnWet?.addEventListener("click", () => {
+  if (ovenInterval) clearInterval(ovenInterval);
+  ovenInterval = null;
+  setWetView();
+});
+
+btnOven?.addEventListener("click", () => {
+  // Prevent double start
+  if (ovenInterval) return;
+
+  // “Door” shows heating
+  if (ovenDoor) ovenDoor.textContent = "🔥";
+
+  let seconds = 0;
+  if (ovenStatus) ovenStatus.textContent = "Хатаалт явж байна… (симуляц)";
+
+  ovenInterval = setInterval(() => {
+    seconds += 1;
+    const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const ss = String(seconds % 60).padStart(2, "0");
+    if (ovenTimer) ovenTimer.textContent = `${mm}:${ss}`;
+
+    // At 5 sec: suggest m2
+    if (seconds === 5) {
+      // Fill m2 automatically if empty
+      const m1 = parseFloat(document.getElementById("m1")?.value || "NaN");
+      const m0 = parseFloat(document.getElementById("m0")?.value || "NaN");
+      if (isFinite(m1) && isFinite(m0)) {
+        // crude demo: reduce wet sample by 20-30%
+        const wet = m1 - m0;
+        const proposedDry = m0 + wet * 0.78;
+        const m2El = document.getElementById("m2");
+        if (m2El && (!m2El.value || m2El.value === "0")) {
+          m2El.value = proposedDry.toFixed(3);
+        }
+      }
+      if (ovenStatus) ovenStatus.textContent = "4–5 цагийн дараах жин (m₂) санал болголоо. Дахин хатаалт үргэлжилнэ…";
+    }
+
+    // At 9 sec: suggest m3 and finish
+    if (seconds === 9) {
+      const m2 = parseFloat(document.getElementById("m2")?.value || "NaN");
+      if (isFinite(m2)) {
+        const m3El = document.getElementById("m3");
+        // small change for constant mass
+        const proposedM3 = m2 - 0.006;
+        if (m3El && (!m3El.value || m3El.value === "0")) {
+          m3El.value = proposedM3.toFixed(3);
+        }
+      }
+
+      if (btnDry) { btnDry.disabled = false; btnDry.style.opacity = 1; }
+      if (ovenStatus) ovenStatus.textContent = "Хатаалт дууслаа. m₃ жин санал болгогдлоо. Одоо “Тогтмол жин шалгах” хийж болно.";
+
+      clearInterval(ovenInterval);
+      ovenInterval = null;
+    }
+  }, 1000);
+});
+
+btnDry?.addEventListener("click", () => {
+  setDryView();
+});
   updateConclusion();
 });
 
