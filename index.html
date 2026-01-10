@@ -6,21 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
-<body style="font-family:-apple-system,system-ui;padding:20px;line-height:1.5">
+<body style="font-family:-apple-system,system-ui;padding:20px;line-height:1.55">
 
-  <h1>🧪 SafetyFoodBioChem-Lab</h1>
+  <h1 style="margin:0 0 10px 0">🧪 SafetyFoodBioChem-Lab</h1>
+  <p style="margin:0 0 18px 0;color:#555">
+    Хүнсний биохимийн виртуал лаборатори — дадлагаа сонгоод алхамчилж гүйцэтгэнэ.
+  </p>
 
-  <!-- Consent / Guide -->
-  <section id="consent">
-    <h2>🧾 Виртуал лабораторийг зөв ашиглах заавар</h2>
+  <!-- 0) Consent / Guide -->
+  <section id="consent" style="border:1px solid #ddd;border-radius:12px;padding:14px;margin-bottom:14px">
+    <h2 style="margin:0 0 8px 0">🧾 Виртуал лабораторийг зөв ашиглах заавар</h2>
 
-    <p>
+    <p style="margin:0 0 10px 0">
       Энэхүү виртуал лаборатори нь хүнсний биохимийн хичээлийн зайлшгүй хийх шаардлагатай боловч
       бодит лабораторид химийн хортой, дэгдэмтгий бодис ашигладаг тул хязгаарлагдсан туршилтуудыг
       аюулгүй орчинд гүйцэтгэхэд зориулагдсан болно.
     </p>
 
-    <ol>
+    <ol style="margin:0 0 10px 18px">
       <li>Дадлага эхлэхийн өмнө зорилго, онолын үндэс, дарааллыг анхааралтай уншина.</li>
       <li>Туршилтыг заасан дарааллаар гүйцэтгэнэ (алхам алгасахгүй).</li>
       <li>Оролтын утгуудыг зөв нэгжээр, бодит нөхцөлд нийцүүлэн оруулна.</li>
@@ -28,24 +31,201 @@
       <li>Систем нь үйлдэл бүрийг автоматаар бүртгэж, гүйцэтгэлийг үнэлнэ.</li>
     </ol>
 
-    <label style="display:block;margin-top:12px">
+    <label style="display:flex;gap:10px;align-items:center;margin-top:10px">
       <input type="checkbox" id="agreeChk" />
-      Би зааврыг уншиж ойлгосон бөгөөд зөвшөөрч байна.
+      <span>Би зааврыг уншиж ойлгосон бөгөөд зөвшөөрч байна.</span>
     </label>
 
-    <button id="agreeBtn" disabled style="margin-top:12px;padding:10px 14px">
-      Дадлага эхлэх
+    <button id="agreeBtn" disabled
+      style="margin-top:12px;padding:10px 14px;border-radius:10px;border:1px solid #ccc">
+      Дадлага руу орох
     </button>
 
-    <p style="color:#666;font-size:14px;margin-top:10px">
+    <p style="color:#666;font-size:13px;margin:10px 0 0 0">
       Анхааруулга: Зааврыг зөрчсөн тохиолдолд тухайн дадлагын үнэлгээ буурах боломжтой.
     </p>
   </section>
 
-  <!-- Main/Home -->
+  <!-- 1) Home / Lab list -->
   <section id="home" style="display:none">
-    <h2>🧪 Туршилтууд</h2>
-    <p>Энд дараа нь виртуал туршилтууд орно.</p>
+    <h2 style="margin:0 0 8px 0">📚 Дадлагын жагсаалт</h2>
+    <p style="margin:0 0 12px 0;color:#555">Дадлагаа сонгоод эхлүүлнэ үү.</p>
+
+    <div style="display:grid;gap:10px">
+      <button data-go="lab-01-meat-protein" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        1) Махны уургийг тодорхойлох
+      </button>
+
+      <button data-go="lab-02-sausage-fat" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        2) Зайдасны өөх тос тодорхойлох
+      </button>
+
+      <button data-go="lab-03-bread-carbs" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        3) Талхны нүүрс ус тодорхойлох
+      </button>
+
+      <button data-go="lab-04-spinach-minerals" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        4) Бууцайн эрдэс бодис тодорхойлох
+      </button>
+
+      <button data-go="lab-05-yogurt-water-acidity-aw" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        5) Тарагны усны агууламж, хүчиллэг, усны идэвхи тодорхойлох
+      </button>
+
+      <button data-go="lab-06-raw-vs-cooked-meat" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        6) Түүхий мах, чанасан махны боловсруулалтын ялгааг тодорхойлох
+      </button>
+
+      <button data-go="lab-07-milk-fat-gerber" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        7) Герберийн аргаар сүүний тослог тодорхойлох
+      </button>
+
+      <button data-go="lab-08-meat-proteolysis-ph" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        8) Махан бүтээгдэхүүний уургын задрал, pH өөрчлөлт
+      </button>
+
+      <button data-go="lab-09-sausage-peroxide-titration" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        9) Хиамны пероксидын тоог титрометрийн аргаар тодорхойлох
+      </button>
+
+      <button data-go="lab-10-dough-fermentation-volume-structure" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        10) Гурилан зуурмаг бэлдэх, исгэх явц дахь эзэлхүүн ба бүтцийн өөрчлөлт
+      </button>
+
+      <button data-go="lab-11-banana-ripening-storage-chem" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        11) Гадил жимсний боловсрох, хадгалах явц дахь химийн өөрчлөлт
+      </button>
+
+      <button data-go="lab-12-red-cabbage-anthocyanin-uvvis" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        12) Улаан байцаанаас антоцианин НҮХ (UV-Vis) аргаар тодорхойлох
+      </button>
+
+      <button data-go="lab-13-sunflower-oil-oxidation-indices" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        13) Наранцэцэгийн тосны исэлдэлтийн үзүүлэлт тодорхойлох
+      </button>
+
+      <button data-go="lab-14-yogurt-bioactive-peptides" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        14) Тарагны исэлдэх явцад био идэвхит пептидийн задрал тодорхойлох
+      </button>
+
+      <button data-go="lab-15-tomato-juice-total-solids" style="padding:12px 14px;text-align:left;border-radius:12px;border:1px solid #ddd">
+        15) Улаанлоолийн шүүсэнд хуурай бодис тодорхойлох
+      </button>
+    </div>
+
+    <div style="margin-top:14px;color:#777;font-size:13px">
+      * Дадлага бүрийн протокол, тооцооллыг дараагийн алхмуудаар нэмж хөгжүүлнэ.
+    </div>
+  </section>
+
+  <!-- ====== LAB SECTIONS (placeholders) ====== -->
+
+  <!-- helper style for lab cards -->
+  <style>
+    .labCard{
+      display:none;
+      border:1px solid #ddd;
+      border-radius:12px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+    .backBtn{
+      margin-top:12px;
+      padding:10px 14px;
+      border-radius:10px;
+      border:1px solid #ccc;
+    }
+    .muted{color:#555}
+  </style>
+
+  <section id="lab-01-meat-protein" class="labCard">
+    <h2>1) Махны уургийг тодорхойлох</h2>
+    <p class="muted">(Энд протокол, алхамчилсан гүйцэтгэл, тооцоолол орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-02-sausage-fat" class="labCard">
+    <h2>2) Зайдасны өөх тос тодорхойлох</h2>
+    <p class="muted">(Энд протокол, алхамчилсан гүйцэтгэл, тооцоолол орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-03-bread-carbs" class="labCard">
+    <h2>3) Талхны нүүрс ус тодорхойлох</h2>
+    <p class="muted">(Энд протокол, алхамчилсан гүйцэтгэл, тооцоолол орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-04-spinach-minerals" class="labCard">
+    <h2>4) Бууцайн эрдэс бодис тодорхойлох</h2>
+    <p class="muted">(Энд протокол, алхамчилсан гүйцэтгэл, тооцоолол орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-05-yogurt-water-acidity-aw" class="labCard">
+    <h2>5) Тарагны усны агууламж, хүчиллэг, усны идэвхи тодорхойлох</h2>
+    <p class="muted">(Энд 3 дэд хэмжилтийн урсгал, тооцоолол орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-06-raw-vs-cooked-meat" class="labCard">
+    <h2>6) Түүхий мах, чанасан махны боловсруулалтын ялгааг тодорхойлох</h2>
+    <p class="muted">(Энд ажиглалт + тайлбар/дүн шинжилгээ орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-07-milk-fat-gerber" class="labCard">
+    <h2>7) Герберийн аргаар сүүний тослог тодорхойлох</h2>
+    <p class="muted">(Энд бутирометр, хүхрийн хүчил, центрифугийн алхамчилсан симуляц орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-08-meat-proteolysis-ph" class="labCard">
+    <h2>8) Махан бүтээгдэхүүний уургын задрал, pH өөрчлөлт</h2>
+    <p class="muted">(Энд хугацаа-өгөгдөл, pH, протеолизийн үзүүлэлтийн симуляц орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-09-sausage-peroxide-titration" class="labCard">
+    <h2>9) Хиамны пероксидын тоог титрометрийн аргаар тодорхойлох</h2>
+    <p class="muted">(Энд титрлэлт, blank/sample, PV тооцоолол орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-10-dough-fermentation-volume-structure" class="labCard">
+    <h2>10) Гурилан зуурмаг бэлдэх, исгэх явц дахь эзэлхүүн ба бүтцийн өөрчлөлт</h2>
+    <p class="muted">(Энд исгэлтийн явцын график/ажиглалт/үр дүн орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-11-banana-ripening-storage-chem" class="labCard">
+    <h2>11) Гадил жимсний боловсрох, хадгалах явц дахь химийн өөрчлөлт</h2>
+    <p class="muted">(Энд боловсролтын үе шат, химийн өөрчлөлтийн тайлбар орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-12-red-cabbage-anthocyanin-uvvis" class="labCard">
+    <h2>12) Улаан байцаанаас антоцианин НҮХ (UV-Vis) аргаар тодорхойлох</h2>
+    <p class="muted">(Энд спектр, λmax, тооцоолол/стандарт муруй орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-13-sunflower-oil-oxidation-indices" class="labCard">
+    <h2>13) Наранцэцэгийн тосны исэлдэлтийн үзүүлэлт тодорхойлох</h2>
+    <p class="muted">(Энд пероксидын тоо/хүчиллэг/тогтвортой байдлын блок орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-14-yogurt-bioactive-peptides" class="labCard">
+    <h2>14) Тарагны исэлдэх явцад био идэвхит пептидийн задрал тодорхойлох</h2>
+    <p class="muted">(Энд ферментацийн хугацаа, пептидийн өөрчлөлтийн симуляц орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+  </section>
+
+  <section id="lab-15-tomato-juice-total-solids" class="labCard">
+    <h2>15) Улаанлоолийн шүүсэнд хуурай бодис тодорхойлох</h2>
+    <p class="muted">(Энд рефрактометр/хугарлын илтгэгч, хүснэгт, тооцоолол орно.)</p>
+    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
   </section>
 
   <script src="app.js"></script>
