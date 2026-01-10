@@ -138,11 +138,131 @@
     .muted{color:#555}
   </style>
 
-  <section id="lab-01-meat-protein" class="labCard hidden">
-    <h2>1) Махны уургийг тодорхойлох</h2>
-    <p class="muted">(Энд протокол, алхамчилсан гүйцэтгэл, тооцоолол орно.)</p>
-    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
-  </section>
+  <section id="lab-01-meat-protein" class="labCard">
+  <h2>1) Хүнсний түүхий эдийн химийн ерөнхий найрлага — Жишээ: Махан дээж (ус + уураг)</h2>
+
+  <p class="muted">
+    <b>Сэдэв:</b> Жин-аналитик ба стандарт лабораторийн арга<br>
+    <b>Зорилго:</b> Хүнсний түүхий эдийн химийн ерөнхий найрлага (ус, уураг, өөх тос, нүүрс ус, үнс)-аас
+    энэ дадлагад <b>ус</b> болон <b>уураг</b>-ийг тодорхойлж, тэжээллэг чанар, физиологийн ач холбогдлыг үнэлнэ.
+  </p>
+
+  <details>
+    <summary><b>Урвалж бодис</b></summary>
+    <ul>
+      <li>Нэрмэл ус</li>
+      <li>(Танилцуулга) Концентрацитай хүхрийн хүчил (Кьельдалийн арга)</li>
+      <li>(Дараагийн дадлагад) Органик уусгагч (эфир/гексан) – өөх тос тодорхойлоход</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><b>Багаж, хэрэглэгдэхүүн</b></summary>
+    <ul>
+      <li>Аналитик жин</li>
+      <li>Хатаах шүүгээ (105°C)</li>
+      <li>Муфель зуух (550°C) – (үнс тодорхойлоход)</li>
+      <li>Фарфор тигель, хатаагч, эксикатор</li>
+      <li>Экстрактор – (өөх тос тодорхойлоход)</li>
+    </ul>
+  </details>
+
+  <details open>
+    <summary><b>1.1 Дээж бэлтгэх</b></summary>
+    <ol>
+      <li>Үхрийн махнаас холбогч эд, ил харагдах өөхийг авч цэвэрлэнэ.</li>
+      <li>Хутга/мах машин ашиглан жигд жижиглэнэ.</li>
+      <li>Битүү саванд хийж, чийг алдагдахаас сэргийлнэ.</li>
+    </ol>
+  </details>
+
+  <details open>
+    <summary><b>1.2 Усны агууламж тодорхойлох (жингийн арга, тогтмол жин)</b></summary>
+    <p class="muted">
+      Алхамчилж хатаагаад жинлэнэ. <b>Жин тогтмол болсон эсэх</b>-ийг W3–W2 ялгаагаар шалгана.
+    </p>
+    <div style="display:grid;gap:10px;max-width:520px">
+      <div style="border:1px solid #ddd;border-radius:12px;padding:12px">
+        <b>Оролт (анхны жинлэлтүүд)</b><br><br>
+
+        <label>m₀: Цэвэр, хуурай тигель (g)</label><br>
+        <input id="m0" type="number" step="0.001" value="30.000" style="width:180px"><br><br>
+
+        <label>m₁: Тигель + нойтон дээж (g)</label><br>
+        <input id="m1" type="number" step="0.001" value="42.000" style="width:180px"><br><br>
+
+        <label>m₂: 105°C-д 4–5 цаг хатаасны дараах жин (g)</label><br>
+        <input id="m2" type="number" step="0.001" value="39.200" style="width:180px"><br><br>
+
+        <label>m₃: 30–60 мин дахин хатаагаад жинлэсэн жин (g)</label><br>
+        <input id="m3" type="number" step="0.001" value="39.150" style="width:180px"><br><br>
+
+        <label>Тогтмол жин шалгах босго (g) — (m₃ − m₂) ≤ ?</label><br>
+        <input id="tol" type="number" step="0.001" value="0.010" style="width:180px"><br><br>
+
+        <button id="btnCheckConst" style="padding:10px 14px">Тогтмол жин шалгах</button>
+        <div id="constOut" style="font-weight:700;margin-top:8px">Төлөв = —</div>
+      </div>
+
+      <div style="border:1px solid #ddd;border-radius:12px;padding:12px">
+        <b>Усны агууламж (%)</b>
+        <p class="muted" style="margin-top:6px">
+          Усны агууламж (%) = ((m₁ − m_dry) / (m₁ − m₀)) × 100<br>
+          Энд m_dry = тогтмол жин болсон <b>сүүлийн жин</b> (ихэвчлэн m₃).
+        </p>
+
+        <button id="btnCalcMoist" style="padding:10px 14px">Ус % тооцоолох</button>
+        <div id="moistOut" style="font-weight:700;margin-top:8px">Ус = —</div>
+        <div id="moistNote" class="muted"></div>
+      </div>
+    </div>
+  </details>
+
+  <details open>
+    <summary><b>1.3 Уураг тодорхойлох — Кьельдалийн арга (сургалтын түвшинд, загварчилгаа)</b></summary>
+    <p class="muted">
+      ⚠️ Энэ виртуал дадлагад Кьельдалийн аргыг <b>танилцуулгын</b> түвшинд үзүүлнэ.
+      Бодит лабораторийн H₂SO₄, NaOH, нэрэх төхөөрөмж, титрлэлтийн алхамыг тайлбарлан,
+      тооцооллыг <b>нийт азот (%)</b> дээр суурилж хийнэ.
+    </p>
+
+    <div style="display:grid;gap:10px;max-width:520px">
+      <div style="border:1px solid #ddd;border-radius:12px;padding:12px">
+        <b>3 үе шат (товч ойлголт)</b>
+        <ol>
+          <li><b>Digesting:</b> органик азот → (NH₄)₂SO₄</li>
+          <li><b>Neutralize + Distill:</b> NH₃ ялгаруулж барих</li>
+          <li><b>Titration:</b> стандарт хүчлээр титрлэж N% гаргах</li>
+        </ol>
+      </div>
+
+      <div style="border:1px solid #ddd;border-radius:12px;padding:12px">
+        <b>Тооцоолол</b>
+        <p class="muted" style="margin-top:6px">
+          Уураг (%) = Азот (%) × коэффициент (ихэвчлэн 6.25)
+        </p>
+
+        <label>Нийт азот, N (%)</label><br>
+        <input id="nPct" type="number" step="0.001" value="3.20" style="width:180px"><br><br>
+
+        <label>Коэффициент</label><br>
+        <input id="kFac" type="number" step="0.01" value="6.25" style="width:180px"><br><br>
+
+        <button id="btnCalcProtein" style="padding:10px 14px">Уураг % тооцоолох</button>
+        <div id="protOut" style="font-weight:700;margin-top:8px">Уураг = —</div>
+      </div>
+    </div>
+  </details>
+
+  <details open>
+    <summary><b>1.5 Үр дүнгийн тайлбар</b></summary>
+    <div id="autoConclusion" style="padding:10px 12px;border:1px dashed #ccc;border-radius:10px">
+      Дүгнэлт = —
+    </div>
+  </details>
+
+  <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
+</section>
 
   <section id="lab-02-sausage-fat" class="labCard hidden">
     <h2>2) Зайдасны өөх тос тодорхойлох</h2>
