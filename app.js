@@ -1,6 +1,6 @@
+alert("app.js ажиллаж байна ✅");
 // SafetyFoodBioChem-Lab-Step 2
 // Consent (I agree) logic ONLY
-
 const agreeChk = document.getElementById("agreeChk");
 const agreeBtn = document.getElementById("agreeBtn");
 const consentSection = document.getElementById("consent");
