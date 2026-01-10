@@ -187,7 +187,65 @@
 
         <label>m₀: Цэвэр, хуурай тигель (g)</label><br>
         <input id="m0" type="number" step="0.001" value="30.000" style="width:180px"><br><br>
+<!-- 🔥 Visual mini-sim: Wet meat -> Oven -> Dried meat -->
+<div style="border:1px solid #ddd;border-radius:14px;padding:12px;margin:12px 0;max-width:560px">
+  <b>Мини симуляц: Нойтон мах → 105°C зуух → Хатаасан мах</b>
+  <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-top:10px">
 
+    <!-- “Images” using simple emoji blocks (we can replace with real images later) -->
+    <div style="flex:1;min-width:220px">
+      <div id="meatCard"
+           style="border:1px solid #ccc;border-radius:12px;padding:10px;text-align:center">
+        <div id="meatVisual" style="font-size:54px;line-height:1.2">🥩💧</div>
+        <div id="meatLabel" style="font-weight:700;margin-top:6px">Нойтон дээж</div>
+        <div id="meatDesc" style="color:#555;font-size:13px;margin-top:4px">
+          Чийг ихтэй, өнгө “шинэ” харагдана.
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button id="btnWet" style="padding:10px 12px;border-radius:10px;border:1px solid #ccc">
+          Нойтон төлөв
+        </button>
+        <button id="btnOven" style="padding:10px 12px;border-radius:10px;border:1px solid #ccc">
+          105°C-д хатаах
+        </button>
+        <button id="btnDry" disabled style="padding:10px 12px;border-radius:10px;border:1px solid #ccc;opacity:.6">
+          Хатаасан төлөв
+        </button>
+      </div>
+    </div>
+
+    <!-- Oven card -->
+    <div style="flex:1;min-width:220px">
+      <div style="border:1px solid #ccc;border-radius:12px;padding:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b>🧯 Oven</b>
+          <span id="ovenTemp" style="font-weight:700">105°C</span>
+        </div>
+
+        <div id="ovenDoor"
+             style="margin-top:10px;border:1px solid #bbb;border-radius:10px;height:110px;
+                    display:flex;align-items:center;justify-content:center;font-size:44px;">
+          🚪
+        </div>
+
+        <div style="margin-top:10px">
+          <div style="color:#666;font-size:13px">Timer</div>
+          <div id="ovenTimer" style="font-weight:800;font-size:20px">00:00</div>
+          <div id="ovenStatus" style="color:#555;font-size:13px;margin-top:4px">
+            Дараах товчийг дарж хатаалтыг эхлүүлнэ.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="simHint" style="margin-top:10px;color:#555;font-size:13px">
+    ✅ “105°C-д хатаах” дармагц таймер явж, m₂/m₃ жин автоматаар санал болгогдоно.
+  </div>
+</div>
         <label>m₁: Тигель + нойтон дээж (g)</label><br>
         <input id="m1" type="number" step="0.001" value="42.000" style="width:180px"><br><br>
 
