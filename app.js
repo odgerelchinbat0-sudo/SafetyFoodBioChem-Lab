@@ -35,3 +35,21 @@ if (saved) {
     }
   } catch (e) {}
 }
+// Enable "Дадлага эхлэх" button when checkbox is checked
+document.addEventListener("DOMContentLoaded", () => {
+  const agreeChk = document.getElementById("agreeChk");
+  const agreeBtn = document.getElementById("agreeBtn");
+
+  if (!agreeChk || !agreeBtn) return;
+
+  // initial state
+  agreeBtn.disabled = !agreeChk.checked;
+
+  agreeChk.addEventListener("change", () => {
+    agreeBtn.disabled = !agreeChk.checked;
+  });
+
+  agreeBtn.addEventListener("click", () => {
+    alert("OK! Дараагийн алхам: дадлагын жагсаалт руу оруулна (удахгүй).");
+  });
+});
