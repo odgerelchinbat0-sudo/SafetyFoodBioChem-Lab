@@ -322,9 +322,63 @@
   <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
 </section>
 
-  <section id="lab-02-sausage-fat" class="labCard hidden">
-    <h2>2) Зайдасны өөх тос тодорхойлох</h2>
-    <p class="muted">(Энд протокол, алхамчилсан гүйцэтгэл, тооцоолол орно.)</p>
+  <section id="lab02" class="labCard" style="display:none">
+  <button data-back>← Буцах</button>
+
+  <h2>Дадлага 2 — Өөх тос тодорхойлох (Зайдас, экстракцийн арга)</h2>
+
+  <p><b>Зорилго:</b> Чанасан зайдасны өөх тосны агууламжийг жин-аналитик, экстракцийн аргаар тодорхойлох.</p>
+
+  <h3>Оролтын жин (g)</h3>
+  <div>
+    <label>m₀ — Хоосон тигель (эсвэл дээжийн сав) <br>
+      <input id="lab2_m0" type="number" step="0.001" placeholder="ж: 32.415">
+    </label>
+  </div>
+  <div>
+    <label>m₁ — Тигель + нойтон дээж <br>
+      <input id="lab2_m1" type="number" step="0.001" placeholder="ж: 45.820">
+    </label>
+  </div>
+  <div>
+    <label>m₂ — Тигель + хатаасан дээж (105°C) <br>
+      <input id="lab2_m2" type="number" step="0.001" placeholder="ж: 40.110">
+    </label>
+  </div>
+
+  <hr>
+
+  <div>
+    <label>m₃ — Экстракцийн колбо (хуурай, хоосон) <br>
+      <input id="lab2_m3" type="number" step="0.001" placeholder="ж: 78.250">
+    </label>
+  </div>
+  <div>
+    <label>m₄ — Колбо + ялгарсан тос (уусгагч ууршуулсны дараа) <br>
+      <input id="lab2_m4" type="number" step="0.001" placeholder="ж: 79.615">
+    </label>
+  </div>
+
+  <hr>
+
+  <h3>Тооцоолол</h3>
+
+  <label>Суурь сонгох:
+    <select id="lab2_basis">
+      <option value="wet">Нойтон суурь (m₁−m₀)</option>
+      <option value="dry">Хуурай суурь (m₂−m₀)</option>
+    </select>
+  </label>
+
+  <br><br>
+  <button id="lab2_btnCalc">Тооцоолох</button>
+
+  <p id="lab2_outFat">Өөх тос = —</p>
+  <p id="lab2_outMoist">Ус (урьдчилсан хатаалтын үр дүн) = —</p>
+  <p id="lab2_outNotes" style="opacity:0.85"></p>
+
+  <h3>Үр дүнгийн тайлбар (автоматаар)</h3>
+  <p id="lab2_conclusion">—</p>
     <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
   </section>
 
