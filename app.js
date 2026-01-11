@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // =========================
-  // A) CONSENT (I agree)
-  // =========================
+
+  /* =====================
+     1) CONSENT LOGIC
+  ====================== */
   const agreeChk = document.getElementById("agreeChk");
   const agreeBtn = document.getElementById("agreeBtn");
   const consentSection = document.getElementById("consent");
@@ -10,25 +11,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function showHome() {
     if (consentSection) consentSection.style.display = "none";
     if (homeSection) homeSection.style.display = "block";
-    window.scrollTo(0, 0);
   }
 
-  // If already agreed before, skip consent
-  const savedConsent = localStorage.getItem("foodbiolab_consent");
-  if (savedConsent) {
+  const saved = localStorage.getItem("foodbiolab_consent");
+  if (saved) {
     try {
-      const c = JSON.parse(savedConsent);
-      if (c && c.agreed === true) showHome();
-    } catch (_) {}
+      const c = JSON.parse(saved);
+      if (c?.agreed) showHome();
+    } catch {}
   }
 
   if (agreeChk && agreeBtn) {
     agreeBtn.disabled = !agreeChk.checked;
-
     agreeChk.addEventListener("change", () => {
       agreeBtn.disabled = !agreeChk.checked;
     });
-
     agreeBtn.addEventListener("click", () => {
       localStorage.setItem(
         "foodbiolab_consent",
@@ -38,19 +35,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // =========================
-  // B) NAVIGATION: home <-> lab sections
-  // =========================
+  /* =====================
+     2) NAVIGATION
+  ====================== */
   function hideAllLabs() {
-    document.querySelectorAll(".labCard").forEach((sec) => {
+    document.querySelectorAll(".labCard").forEach(sec => {
       sec.style.display = "none";
     });
   }
 
-  function goToLab(labId) {
+  function goToLab(id) {
     if (homeSection) homeSection.style.display = "none";
     hideAllLabs();
-    const sec = document.getElementById(labId);
+    const sec = document.getElementById(id);
     if (sec) sec.style.display = "block";
     window.scrollTo(0, 0);
   }
@@ -61,36 +58,20 @@ document.addEventListener("DOMContentLoaded", () => {
     window.scrollTo(0, 0);
   }
 
-  // Buttons in home list
-  document.querySelectorAll("[data-go]").forEach((btn) => {
+  document.querySelectorAll("[data-go]").forEach(btn => {
     btn.addEventListener("click", () => {
-      const labId = btn.getAttribute("data-go");
-      if (labId) goToLab(labId);
+      const id = btn.getAttribute("data-go");
+      if (id) goToLab(id);
     });
   });
 
-  // Back buttons in lab sections
-  document.querySelectorAll("[data-back]").forEach((btn) => {
+  document.querySelectorAll("[data-back]").forEach(btn => {
     btn.addEventListener("click", backToHome);
   });
 
-  // =========================
-  // Helpers
-  // =========================
-  function num(id) {
-    const el = document.getElementById(id);
-    if (!el) return NaN;
-    return parseFloat(el.value);
-  }
-
-  function setText(id, text) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = text;
-  }
-
-  // =========================
-  // C) LAB 01: Constant mass + Moisture + Protein
-  // =========================
+  /* =====================
+     3) LAB 01 – CALCULATION
+  ====================== */
   const constOut = document.getElementById("constOut");
   const moistOut = document.getElementById("moistOut");
   const moistNote = document.getElementById("moistNote");
@@ -101,92 +82,40 @@ document.addEventListener("DOMContentLoaded", () => {
   let lastProtein = null;
   let isConst = false;
 
-  function updateConclusion() {
-    if (!autoConclusion) return;
-
-    const parts = [];
-    if (lastMoist != null) parts.push(`усны агууламж ${lastMoist.toFixed(2)}%`);
-    if (lastProtein != null) parts.push(`уургийн агууламж ${lastProtein.toFixed(2)}%`);
-
-    if (parts.length === 0) {
-      autoConclusion.textContent = "Дүгнэлт = —";
-      return;
-    }
-
-    const constTxt = isConst
-      ? "Жин тогтмол болсон гэж баталсан."
-      : "Жин тогтмол эсэхийг дахин шалгах шаардлагатай.";
-
-    autoConclusion.textContent =
-      `Дүгнэлт: Үхрийн махан дээжийн ${parts.join(", ")} байна. ${constTxt} ` +
-      `Махан бүтээгдэхүүн нь өндөр биологийн үнэлэмжтэй уураг агуулдаг бөгөөд ` +
-      `уургийн хэмжээ нь тэжээллэг чанар, булчингийн өсөлт, эдийн нөхөн төлжилтөд оруулах хувь нэмрийг үнэлэх үндэс болдог.`;
-  }
+  const num = id => parseFloat(document.getElementById(id)?.value || "NaN");
 
   document.getElementById("btnCheckConst")?.addEventListener("click", () => {
     const m2 = num("m2");
     const m3 = num("m3");
     const tol = num("tol");
 
-    if (!isFinite(m2) || !isFinite(m3) || !isFinite(tol) || tol <= 0) {
-      if (constOut) constOut.textContent = "Төлөв = ⚠️ m₂, m₃, босго зөв оруулна уу";
+    if (![m2, m3, tol].every(isFinite)) {
+      constOut.textContent = "⚠️ Утгууд буруу";
       isConst = false;
-      updateConclusion();
       return;
     }
 
     const diff = Math.abs(m3 - m2);
     isConst = diff <= tol;
+    constOut.textContent = isConst
+      ? `✅ Тогтмол жин (|m₃−m₂|=${diff.toFixed(3)} g)`
+      : `⏳ Тогтмол биш (|m₃−m₂|=${diff.toFixed(3)} g)`;
 
-    if (constOut) {
-      constOut.textContent = isConst
-        ? `Төлөв = ✅ Тогтмол жин болсон (|m₃−m₂| = ${diff.toFixed(3)} g)`
-        : `Төлөв = ⏳ Тогтмол биш (|m₃−m₂| = ${diff.toFixed(3)} g). Дахин хатааж жинлэнэ.`;
-    }
     updateConclusion();
   });
 
   document.getElementById("btnCalcMoist")?.addEventListener("click", () => {
-    const m0 = num("m0");
-    const m1 = num("m1");
-    const m2 = num("m2");
-    const m3 = num("m3");
+    const m0 = num("m0"), m1 = num("m1"), m2 = num("m2"), m3 = num("m3");
+    if (![m0, m1, m2, m3].every(isFinite)) return;
 
-    if (![m0, m1, m2, m3].every(isFinite)) {
-      if (moistOut) moistOut.textContent = "Ус = ⚠️ m₀, m₁, m₂, m₃-ийг бүгдийг оруулна уу";
-      if (moistNote) moistNote.textContent = "";
-      lastMoist = null;
-      updateConclusion();
-      return;
-    }
-    if (m1 <= m0) {
-      if (moistOut) moistOut.textContent = "Ус = ⚠️ m₁ нь m₀-оос их байх ёстой";
-      if (moistNote) moistNote.textContent = "";
-      lastMoist = null;
-      updateConclusion();
-      return;
-    }
-    if (m2 <= m0 || m3 <= m0 || m2 > m1 || m3 > m1) {
-      if (moistOut) moistOut.textContent = "Ус = ⚠️ m₂/m₃ утга боломжгүй байна (жин шалгана уу)";
-      if (moistNote) moistNote.textContent = "";
-      lastMoist = null;
-      updateConclusion();
-      return;
-    }
-
-    const mDry = isConst ? m3 : m2; // if not confirmed, use m2 with warning
-    const wetSample = m1 - m0;
-    const waterLoss = m1 - mDry;
-
-    const moisture = (waterLoss / wetSample) * 100;
+    const dry = isConst ? m3 : m2;
+    const moisture = ((m1 - dry) / (m1 - m0)) * 100;
     lastMoist = moisture;
 
-    if (moistOut) moistOut.textContent = `Ус = ${moisture.toFixed(2)} %`;
-    if (moistNote) {
-      moistNote.textContent = isConst
-        ? `m_dry = m₃ ашиглав (тогтмол жин). Нойтон дээж = ${wetSample.toFixed(3)} g`
-        : `⚠️ Тогтмол жин батлагдаагүй тул m_dry = m₂ түр ашиглав. Дахин хатааж шалгаарай.`;
-    }
+    moistOut.textContent = `Ус = ${moisture.toFixed(2)} %`;
+    moistNote.textContent = isConst
+      ? "m₃ ашиглав (тогтмол жин)"
+      : "⚠️ m₂ ашиглав (тогтмол батлагдаагүй)";
 
     updateConclusion();
   });
@@ -194,73 +123,65 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnCalcProtein")?.addEventListener("click", () => {
     const N = num("nPct");
     const k = num("kFac");
+    if (!isFinite(N) || !isFinite(k)) return;
 
-    if (!isFinite(N) || !isFinite(k) || N <= 0 || k <= 0) {
-      if (protOut) protOut.textContent = "Уураг = ⚠️ Азот(%) ба коэффициент 0-ээс их байх ёстой";
-      lastProtein = null;
-      updateConclusion();
-      return;
-    }
-
-    const protein = N * k;
-    lastProtein = protein;
-
-    if (protOut) protOut.textContent = `Уураг = ${protein.toFixed(2)} %`;
+    lastProtein = N * k;
+    protOut.textContent = `Уураг = ${lastProtein.toFixed(2)} %`;
     updateConclusion();
   });
 
-  // =========================
-  // D) LAB 02: Fat (sausage) by extraction
-  // =========================
-  // Formula user gave:
-  // fat% = (m4 - m3) / (m2 - m1) * 100
-  // NOTE: physically sample mass should be (m1-m0) or similar,
-  // but we'll follow your provided formula exactly.
-  document.getElementById("btnCalcFat")?.addEventListener("click", () => {
-    const m0 = num("f_m0");
-    const m1 = num("f_m1");
-    const m2 = num("f_m2");
-    const m3 = num("f_m3");
-    const m4 = num("f_m4");
+  function updateConclusion() {
+    if (!autoConclusion) return;
+    const parts = [];
+    if (lastMoist != null) parts.push(`ус ${lastMoist.toFixed(2)}%`);
+    if (lastProtein != null) parts.push(`уураг ${lastProtein.toFixed(2)}%`);
 
-    if (![m0, m1, m2, m3, m4].every(isFinite)) {
-      setText("fatOut", "Өөх тос = ⚠️ Бүх m утгыг оруулна уу (m₀–m₄)");
-      setText("fatNote", "");
-      return;
-    }
+    autoConclusion.textContent =
+      parts.length === 0
+        ? "—"
+        : `Дүгнэлт: Үхрийн махан дээжийн ${parts.join(", ")}.`;
+  }
 
-    // Basic sanity checks
-    if (m1 <= m0) {
-      setText("fatOut", "Өөх тос = ⚠️ m₁ нь m₀-оос их байх ёстой (дээж нэмэгдсэн жин)");
-      setText("fatNote", "");
-      return;
-    }
-    if (m2 > m1 || m2 <= m0) {
-      setText("fatOut", "Өөх тос = ⚠️ m₂ буруу байна (хатаалтын дараах жин шалгана уу)");
-      setText("fatNote", "");
-      return;
-    }
-    if (m4 < m3) {
-      setText("fatOut", "Өөх тос = ⚠️ m₄ нь m₃-оос бага байж болохгүй");
-      setText("fatNote", "");
-      return;
-    }
+  /* =====================
+     4) VISUAL MINI-SIM (OVEN)
+  ====================== */
+  const btnWet = document.getElementById("btnWet");
+  const btnOven = document.getElementById("btnOven");
+  const btnDry = document.getElementById("btnDry");
+  const meatVisual = document.getElementById("meatVisual");
+  const ovenTimer = document.getElementById("ovenTimer");
+  const ovenStatus = document.getElementById("ovenStatus");
 
-    const fatMass = m4 - m3;
+  let ovenInterval = null;
 
-    const denom = (m2 - m1);
-    if (denom === 0) {
-      setText("fatOut", "Өөх тос = ⚠️ (m₂ − m₁) = 0 болж байна");
-      setText("fatNote", "");
-      return;
-    }
-
-    const fatPct = (fatMass / denom) * 100;
-
-    setText("fatOut", `Өөх тос = ${fatPct.toFixed(2)} %`);
-    setText(
-      "fatNote",
-      `Ялгарсан өөх тосны жин = (m₄ − m₃) = ${fatMass.toFixed(3)} g`
-    );
+  btnWet?.addEventListener("click", () => {
+    clearInterval(ovenInterval);
+    meatVisual.textContent = "🥩💧";
+    ovenTimer.textContent = "00:00";
+    ovenStatus.textContent = "Нойтон төлөв";
+    btnDry.disabled = true;
   });
+
+  btnOven?.addEventListener("click", () => {
+    if (ovenInterval) return;
+    let sec = 0;
+    ovenStatus.textContent = "Хатаалт явж байна…";
+
+    ovenInterval = setInterval(() => {
+      sec++;
+      ovenTimer.textContent = `00:${String(sec).padStart(2,"0")}`;
+      if (sec === 8) {
+        clearInterval(ovenInterval);
+        ovenInterval = null;
+        btnDry.disabled = false;
+        ovenStatus.textContent = "Хатаалт дууслаа";
+      }
+    }, 1000);
+  });
+
+  btnDry?.addEventListener("click", () => {
+    meatVisual.textContent = "🥩✨";
+    ovenStatus.textContent = "Хатаасан дээж";
+  });
+
 });
