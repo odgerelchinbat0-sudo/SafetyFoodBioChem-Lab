@@ -373,14 +373,91 @@
   <br><br>
   <button id="lab2_btnCalc">Тооцоолох</button>
 
-  <p id="lab2_outFat">Өөх тос = —</p>
-  <p id="lab2_outMoist">Ус (урьдчилсан хатаалтын үр дүн) = —</p>
-  <p id="lab2_outNotes" style="opacity:0.85"></p>
+  // ===== Lab 02: Sausage fat by extraction =====
+function lab2_num(id) {
+  return parseFloat(document.getElementById(id)?.value || "NaN");
+}
 
-  <h3>Үр дүнгийн тайлбар (автоматаар)</h3>
-  <p id="lab2_conclusion">—</p>
-    <button data-back class="backBtn">⬅ Жагсаалт руу буцах</button>
-  </section>
+const lab2_btnCalc = document.getElementById("lab2_btnCalc");
+const lab2_outFat = document.getElementById("lab2_outFat");
+const lab2_outMoist = document.getElementById("lab2_outMoist");
+const lab2_outNotes = document.getElementById("lab2_outNotes");
+const lab2_conclusion = document.getElementById("lab2_conclusion");
+const lab2_basis = document.getElementById("lab2_basis");
+
+lab2_btnCalc?.addEventListener("click", () => {
+  const m0 = lab2_num("lab2_m0");
+  const m1 = lab2_num("lab2_m1");
+  const m2 = lab2_num("lab2_m2");
+  const m3 = lab2_num("lab2_m3");
+  const m4 = lab2_num("lab2_m4");
+
+  if (![m0,m1,m2,m3,m4].every(isFinite)) {
+    lab2_outFat.textContent = "Өөх тос = ⚠️ Бүх m утгыг оруулна уу";
+    lab2_outMoist.textContent = "Ус = —";
+    lab2_outNotes.textContent = "";
+    lab2_conclusion.textContent = "—";
+    return;
+  }
+
+  // Basic sanity checks
+  if (m1 <= m0) {
+    lab2_outFat.textContent = "Өөх тос = ⚠️ m₁ нь m₀-оос их байх ёстой";
+    lab2_outMoist.textContent = "Ус = —";
+    lab2_outNotes.textContent = "";
+    lab2_conclusion.textContent = "—";
+    return;
+  }
+  if (m2 <= m0 || m2 > m1) {
+    lab2_outFat.textContent = "Өөх тос = ⚠️ m₂ утга боломжгүй (m₀ < m₂ ≤ m₁ байх ёстой)";
+    lab2_outMoist.textContent = "Ус = —";
+    lab2_outNotes.textContent = "";
+    lab2_conclusion.textContent = "—";
+    return;
+  }
+  if (m4 <= m3) {
+    lab2_outFat.textContent = "Өөх тос = ⚠️ m₄ нь m₃-оос их байх ёстой (ялгарсан тос жин нэмнэ)";
+    lab2_outMoist.textContent = "Ус = —";
+    lab2_outNotes.textContent = "";
+    lab2_conclusion.textContent = "—";
+    return;
+  }
+
+  const fatMass = (m4 - m3);              // g
+  const wetSample = (m1 - m0);            // g
+  const drySample = (m2 - m0);            // g
+
+  // moisture from pre-dry step (optional but helpful)
+  const moisturePct = ((m1 - m2) / wetSample) * 100;
+
+  const basis = lab2_basis?.value || "wet";
+  const denom = (basis === "dry") ? drySample : wetSample;
+
+  if (!isFinite(denom) || denom <= 0) {
+    lab2_outFat.textContent = "Өөх тос = ⚠️ Суурийн жин буруу байна";
+    lab2_outMoist.textContent = "Ус = —";
+    lab2_outNotes.textContent = "";
+    lab2_conclusion.textContent = "—";
+    return;
+  }
+
+  const fatPct = (fatMass / denom) * 100;
+
+  lab2_outFat.textContent =
+    `Өөх тос = ${fatPct.toFixed(2)} % (${basis === "dry" ? "хуурай суурь" : "нойтон суурь"})`;
+
+  lab2_outMoist.textContent = `Ус (урьдчилсан хатаалт) = ${moisturePct.toFixed(2)} %`;
+
+  lab2_outNotes.textContent =
+    `Ялгарсан тосны жин (m₄−m₃) = ${fatMass.toFixed(3)} g | ` +
+    `Нойтон дээж (m₁−m₀) = ${wetSample.toFixed(3)} g | ` +
+    `Хуурай дээж (m₂−m₀) = ${drySample.toFixed(3)} g`;
+
+  lab2_conclusion.textContent =
+    `Дүгнэлт: Чанасан зайдасны дээжийн өөх тосны агууламж ${fatPct.toFixed(2)}% байна ` +
+    `(${basis === "dry" ? "хуурай суурь" : "нойтон суурь"}). Экстракцийн аргаар тодорхойлсөн өөх тосны хэмжээ нь ` +
+    `бүтээгдэхүүний илчлэг, амт, бүтэц болон хадгалалтын тогтвортой байдалд шууд нөлөөлдөг.`;
+});
 
   <section id="lab-03-bread-carbs" class="labCard hidden">
     <h2>3) Талхны нүүрс ус тодорхойлох</h2>
